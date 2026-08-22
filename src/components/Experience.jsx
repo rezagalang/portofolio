@@ -60,8 +60,7 @@ function ExperienceItem({ exp, defaultOpen }) {
         <ul className="overflow-hidden space-y-2.5">
           {exp.points.map((p, i) => (
             <li key={i} className="flex gap-3 text-[15px] leading-relaxed text-muted">
-              <span className="font-mono font-bold text-blue shrink-0">{'//'}</span>
-              {p}
+            {p}
             </li>
           ))}
         </ul>
