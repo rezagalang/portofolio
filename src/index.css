@@ -1,0 +1,144 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------- */
+/* Design tokens — Tailwind v4 reads these straight from CSS, no          */
+/* tailwind.config.js needed. Each --color-* becomes bg-x / text-x /      */
+/* border-x utilities automatically.                                      */
+/*                                                                          */
+/* Neobrutalism system: thick black borders, flat saturated accents,      */
+/* zero blur "hard" shadows that shift on hover/press.                     */
+/* ---------------------------------------------------------------------- */
+@theme {
+  --color-bg: #FFF6DF;
+  --color-surface: #FFFFFF;
+  --color-ink: #0B0B0B;
+  --color-muted: #514E48;
+  --color-line: #0B0B0B;
+
+  --color-yellow: #FFD400;
+  --color-yellow-light: #FFF1AD;
+
+  --color-pink: #FF5FA2;
+  --color-pink-light: #FFDCEC;
+
+  --color-blue: #4D7FFF;
+  --color-blue-light: #DCE6FF;
+
+  --color-lime: #9EF01A;
+  --color-lime-light: #E9FFC2;
+
+  --color-orange: #FF7A3D;
+  --color-orange-light: #FFE1CE;
+
+  --color-live: #16A34A;
+
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+
+  --animate-pulse-dot: pulseDot 2s infinite;
+}
+
+@keyframes pulseDot {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.45); }
+  70% { box-shadow: 0 0 0 6px rgba(22, 163, 74, 0); }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  background-image: radial-gradient(rgba(11, 11, 11, 0.14) 1.5px, transparent 1.5px);
+  background-size: 22px 22px;
+}
+
+::selection {
+  background: #0B0B0B;
+  color: #FFD400;
+}
+
+/* Focus visibility */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid #0B0B0B;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Scroll-triggered reveal targets: GSAP (see hooks.js) sets the initial
+   hidden state via gsap.set and animates in via ScrollTrigger — this class
+   is just a marker, no CSS transition here to avoid double-animating. */
+.reveal {
+  will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+/* thick scrollbar to match the chunky, hand-built feel */
+::-webkit-scrollbar {
+  width: 12px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+  border-left: 2px solid var(--color-ink);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-ink);
+  border: 2px solid var(--color-bg);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-pink);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Neobrutalism primitives — reused across every component so the boxy,   */
+/* hard-shadow language stays consistent instead of one-off arbitrary     */
+/* values scattered through JSX.                                           */
+/* ---------------------------------------------------------------------- */
+.nb-box {
+  border: 3px solid var(--color-ink);
+  box-shadow: 5px 5px 0 0 var(--color-ink);
+  background-color: var(--color-surface);
+}
+
+.nb-btn {
+  border: 3px solid var(--color-ink);
+  box-shadow: 4px 4px 0 0 var(--color-ink);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.nb-btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 0 var(--color-ink);
+}
+.nb-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 0 var(--color-ink);
+}
+
+.nb-card {
+  border: 3px solid var(--color-ink);
+  box-shadow: 6px 6px 0 0 var(--color-ink);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.nb-card:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 9px 9px 0 0 var(--color-ink);
+}
+
+.nb-chip {
+  border: 2px solid var(--color-ink);
+}
