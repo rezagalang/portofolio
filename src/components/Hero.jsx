@@ -30,35 +30,70 @@ export default function Hero() {
   useEffect(() => {
     if (prefersReducedMotion()) return
 
-    // The name is the one place a bespoke, load-once entrance earns its
-    // keep: characters "print" in like a system booting up, matching the
-    // monospace / terminal register of the rest of the page.
-    const split = new SplitText(headingRef.current, { type: 'chars' })
+    const ctx = gsap.context(() => {
+      // The name is the one place a bespoke, load-once entrance earns its
+      // keep: characters "print" in like a system booting up, matching the
+      // monospace / terminal register of the rest of the page.
+      const split = new SplitText(headingRef.current, { type: 'chars' })
 
-    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
-    tl.from(badgeRef.current, { opacity: 0, y: -8, duration: 0.5 })
-      .from(
-        split.chars,
-        { opacity: 0, y: 24, duration: 0.5, stagger: 0.018 },
-        '-=0.15'
-      )
-      .from(subRef.current, { opacity: 0, y: 14, duration: 0.6 }, '-=0.25')
-      .from(locRef.current, { opacity: 0, y: 10, duration: 0.5 }, '-=0.35')
-      .from(
-        ctaRef.current.children,
-        { opacity: 0, y: 10, duration: 0.5, stagger: 0.08 },
-        '-=0.3'
-      )
-      .from(
-        statsRef.current.children,
-        { opacity: 0, y: 14, duration: 0.5, stagger: 0.08 },
-        '-=0.25'
-      )
+      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
 
-    return () => {
-      tl.kill()
-      split.revert()
-    }
+      tl.from(badgeRef.current, {
+        opacity: 0,
+        y: -8,
+        duration: 0.5,
+      })
+        .from(
+          split.chars,
+          {
+            opacity: 0,
+            y: 24,
+            duration: 0.5,
+            stagger: 0.018,
+          },
+          '-=0.15'
+        )
+        .from(
+          subRef.current,
+          {
+            opacity: 0,
+            y: 14,
+            duration: 0.6,
+          },
+          '-=0.25'
+        )
+        .from(
+          locRef.current,
+          {
+            opacity: 0,
+            y: 10,
+            duration: 0.5,
+          },
+          '-=0.35'
+        )
+        .from(
+          ctaRef.current.children,
+          {
+            opacity: 0,
+            y: 10,
+            duration: 0.5,
+            stagger: 0.08,
+          },
+          '-=0.3'
+        )
+        .from(
+          statsRef.current.children,
+          {
+            opacity: 0,
+            y: 14,
+            duration: 0.5,
+            stagger: 0.08,
+          },
+          '-=0.25'
+        )
+    })
+
+    return () => ctx.revert()
   }, [])
 
   return (
