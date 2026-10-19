@@ -53,14 +53,18 @@ function ExperienceItem({ exp, defaultOpen }) {
       </button>
 
       <div
-        className={`grid transition-all duration-300 ease-in-out ${
+        ref={(el) => {
+          if (el) el.inert = !open
+        }}
+        className={`grid transition-[grid-template-rows,opacity,margin] duration-300 ease-out ${
           open ? 'grid-rows-[1fr] opacity-100 mt-4' : 'grid-rows-[0fr] opacity-0'
         }`}
       >
         <ul className="overflow-hidden space-y-2.5">
           {exp.points.map((p, i) => (
             <li key={i} className="flex gap-3 text-[15px] leading-relaxed text-muted">
-            {p}
+              <span className="mt-2 h-2 w-2 shrink-0 border-2 border-ink bg-yellow" aria-hidden="true" />
+              <span>{p}</span>
             </li>
           ))}
         </ul>

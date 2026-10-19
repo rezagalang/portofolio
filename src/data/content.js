@@ -56,6 +56,16 @@ export const experiences = [
 
 export const projects = [
   {
+    name: 'Detags',
+    method: 'GET',
+    route: '/projects/detags',
+    description:
+      'Aplikasi pemesanan makanan kantin Untag Surabaya. Pelanggan memilih kantin dan menu, membayar (termasuk QRIS), lalu memantau pesanan; kasir memproses pesanan dan kurir mengantarnya. Dilengkapi program poin dan sudah rilis di Google Play.',
+    tags: ['Flutter', 'Firebase', 'REST API'],
+    url: 'https://play.google.com/store/apps/details?id=com.kantinuntagsby.detags',
+    urlLabel: 'Lihat di Google Play',
+  },
+  {
     name: 'Smart Attendance System',
     method: 'GET',
     route: '/projects/smart-attendance-system',

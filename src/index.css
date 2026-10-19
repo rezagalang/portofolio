@@ -43,9 +43,9 @@
   70% { box-shadow: 0 0 0 6px rgba(22, 163, 74, 0); }
 }
 
-html {
-  scroll-behavior: smooth;
-}
+/* Lenis owns smooth scrolling; native smooth-scroll would fight it. */
+html.lenis, html.lenis body { height: auto; }
+.lenis:not(.lenis-autoToggle).lenis-stopped { overflow: clip; }
 
 body {
   background-color: var(--color-bg);
@@ -74,18 +74,26 @@ textarea:focus-visible {
 /* Scroll-triggered reveal targets: GSAP (see hooks.js) sets the initial
    hidden state via gsap.set and animates in via ScrollTrigger — this class
    is just a marker, no CSS transition here to avoid double-animating. */
-.reveal {
-  will-change: transform, opacity;
-}
 
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-  * {
+  *, *::before, *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
   }
+}
+
+/* Tech-stack marquee: transform-only, pauses on hover and for reduced motion. */
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 45s linear infinite;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
 }
 
 /* thick scrollbar to match the chunky, hand-built feel */
@@ -118,7 +126,7 @@ textarea:focus-visible {
 .nb-btn {
   border: 3px solid var(--color-ink);
   box-shadow: 4px 4px 0 0 var(--color-ink);
-  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.18s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .nb-btn:hover {
   transform: translate(-2px, -2px);
@@ -132,7 +140,7 @@ textarea:focus-visible {
 .nb-card {
   border: 3px solid var(--color-ink);
   box-shadow: 6px 6px 0 0 var(--color-ink);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .nb-card:hover {
   transform: translate(-3px, -3px);

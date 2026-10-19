@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { ArrowUpRight } from 'lucide-react'
 import { projects } from '../data/content.js'
 import { gsap, prefersReducedMotion } from '../lib/gsap.js'
@@ -6,26 +6,16 @@ import { gsap, prefersReducedMotion } from '../lib/gsap.js'
 const ALL = 'Semua'
 const TAG_COLORS = ['bg-yellow-light', 'bg-pink-light', 'bg-blue-light', 'bg-lime-light', 'bg-orange-light']
 
-// Deterministic per-project "response time" so the hover detail feels like
-// a real status readout instead of a randomly re-rolled number on every
-// hover — same project always reports the same figure.
-function fakeLatency(index) {
-  return 18 + ((index * 37) % 64)
-}
-
-function ProjectCard({ project, index }) {
+function ProjectCard({ project }) {
   const statusRef = useRef(null)
-  const arrowRef = useRef(null)
 
   const handleEnter = () => {
     if (prefersReducedMotion()) return
     gsap.to(statusRef.current, { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out' })
-    gsap.to(arrowRef.current, { x: 2, y: -2, duration: 0.25, ease: 'power2.out' })
   }
   const handleLeave = () => {
     if (prefersReducedMotion()) return
     gsap.to(statusRef.current, { opacity: 0, y: 4, duration: 0.25, ease: 'power2.in' })
-    gsap.to(arrowRef.current, { x: 0, y: 0, duration: 0.25, ease: 'power2.in' })
   }
 
   return (
@@ -39,9 +29,6 @@ function ProjectCard({ project, index }) {
           <span className="text-live">{project.method}</span>
           <span className="text-muted truncate">{project.route}</span>
         </div>
-        <div ref={arrowRef} className="shrink-0 border-2 border-ink rounded p-0.5">
-          <ArrowUpRight size={14} strokeWidth={2.5} className="text-ink" />
-        </div>
       </div>
 
       <h3 className="mt-3 text-lg sm:text-xl font-sans font-extrabold">
@@ -50,6 +37,18 @@ function ProjectCard({ project, index }) {
       <p className="mt-2 text-[15px] leading-relaxed text-muted">
         {project.description}
       </p>
+
+      {project.url && (
+        <a
+          href={project.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="nb-btn mt-4 inline-flex items-center gap-1.5 bg-lime px-3 py-1.5 rounded font-mono text-xs font-bold text-ink"
+        >
+          {project.urlLabel ?? 'Buka proyek'}
+          <ArrowUpRight size={14} strokeWidth={2.5} />
+        </a>
+      )}
 
       <div className="mt-4 flex items-center justify-between gap-3">
         <div className="flex flex-wrap gap-1.5">
@@ -66,7 +65,7 @@ function ProjectCard({ project, index }) {
           ref={statusRef}
           className="font-mono text-[11px] font-bold text-live whitespace-nowrap opacity-0 translate-y-1"
         >
-          200 OK · {fakeLatency(index)}ms
+          200 OK
         </span>
       </div>
     </article>
@@ -81,6 +80,24 @@ export default function Projects() {
   }, [])
 
   const [filter, setFilter] = useState(ALL)
+
+  const gridRef = useRef(null)
+  const firstRender = useRef(true)
+
+  // Re-entry animation when the filter changes (initial load is handled by the scroll reveal).
+  useEffect(() => {
+    if (firstRender.current) {
+      firstRender.current = false
+      return
+    }
+    if (prefersReducedMotion() || !gridRef.current) return
+    const tween = gsap.fromTo(
+      gridRef.current.children,
+      { opacity: 0, y: 16 },
+      { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out', stagger: 0.06, clearProps: 'transform,opacity' }
+    )
+    return () => tween.kill()
+  }, [filter])
 
   const filtered =
     filter === ALL ? projects : projects.filter((p) => p.tags.includes(filter))
@@ -116,11 +133,10 @@ export default function Projects() {
           ))}
         </div>
 
-        <div className="mt-10 grid sm:grid-cols-2 gap-6" data-stagger>
-          {filtered.map((p) => {
-            const originalIndex = projects.findIndex((op) => op.name === p.name)
-            return <ProjectCard key={p.name} project={p} index={originalIndex} />
-          })}
+        <div ref={gridRef} className="mt-10 grid sm:grid-cols-2 gap-6" data-stagger>
+          {filtered.map((p) => (
+            <ProjectCard key={p.name} project={p} />
+          ))}
         </div>
       </div>
     </section>

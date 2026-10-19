@@ -39,3 +39,11 @@ export function startSmoothScroll() {
 export function getLenis() {
   return lenisInstance
 }
+
+/** Scrolls to a section id via Lenis, falling back to native smooth scroll. */
+export function scrollToId(id) {
+  const target = document.getElementById(id)
+  if (!target) return
+  if (lenisInstance) lenisInstance.scrollTo(target, { offset: -64, duration: 1.2 })
+  else target.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth' })
+}

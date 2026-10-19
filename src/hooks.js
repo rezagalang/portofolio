@@ -20,7 +20,7 @@ export function useScrollReveal() {
         if (!items.length) return
         items.forEach((el) => grouped.add(el))
 
-        gsap.set(items, { opacity: 0, y: 18 })
+        gsap.set(items, { opacity: 0, y: 28 })
         ScrollTrigger.create({
           trigger: group,
           start: 'top 82%',
@@ -29,9 +29,10 @@ export function useScrollReveal() {
             gsap.to(items, {
               opacity: 1,
               y: 0,
-              duration: 0.7,
-              ease: 'power2.out',
-              stagger: 0.09,
+              duration: 0.85,
+              ease: 'power3.out',
+              stagger: 0.08,
+              clearProps: 'transform,opacity',
             }),
         })
       })
@@ -40,13 +41,19 @@ export function useScrollReveal() {
         (el) => !grouped.has(el)
       )
       singles.forEach((el) => {
-        gsap.set(el, { opacity: 0, y: 18 })
+        gsap.set(el, { opacity: 0, y: 28 })
         ScrollTrigger.create({
           trigger: el,
           start: 'top 85%',
           once: true,
           onEnter: () =>
-            gsap.to(el, { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' }),
+            gsap.to(el, {
+              opacity: 1,
+              y: 0,
+              duration: 0.85,
+              ease: 'power3.out',
+              clearProps: 'transform,opacity',
+            }),
         })
       })
     })

@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import { ArrowDown, MapPin } from 'lucide-react'
-import { profile } from '../data/content.js'
+import { profile, projects } from '../data/content.js'
 import { useCountUp } from '../hooks.js'
 import { gsap, SplitText, prefersReducedMotion } from '../lib/gsap.js'
+import { scrollToId } from '../lib/smoothScroll.js'
 
 function daysSince(dateStr) {
   const start = new Date(dateStr)
@@ -11,8 +12,8 @@ function daysSince(dateStr) {
 }
 
 export default function Hero() {
-  const [uptime, setUptime] = useState(0)
-  const [projRef, projVal] = useCountUp(6)
+  const [uptime] = useState(() => daysSince(profile.careerStart))
+  const [projRef, projVal] = useCountUp(projects.length)
   const [yearRef, yearVal] = useCountUp(2)
   const [stackRef, stackVal] = useCountUp(4)
 
@@ -24,17 +25,18 @@ export default function Hero() {
   const statsRef = useRef(null)
 
   useEffect(() => {
-    setUptime(daysSince(profile.careerStart))
-  }, [])
-
-  useEffect(() => {
     if (prefersReducedMotion()) return
 
-    const ctx = gsap.context(() => {
+    let ctx
+    let cancelled = false
+    // Wait for web fonts so SplitText measures the final glyphs.
+    document.fonts.ready.then(() => {
+      if (cancelled) return
+      ctx = gsap.context(() => {
       // The name is the one place a bespoke, load-once entrance earns its
       // keep: characters "print" in like a system booting up, matching the
       // monospace / terminal register of the rest of the page.
-      const split = new SplitText(headingRef.current, { type: 'chars' })
+      const split = new SplitText(headingRef.current, { type: 'chars', mask: 'chars' })
 
       const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
 
@@ -46,10 +48,10 @@ export default function Hero() {
         .from(
           split.chars,
           {
-            opacity: 0,
-            y: 24,
-            duration: 0.5,
-            stagger: 0.018,
+            yPercent: 110,
+            duration: 0.7,
+            ease: 'expo.out',
+            stagger: 0.025,
           },
           '-=0.15'
         )
@@ -91,9 +93,13 @@ export default function Hero() {
           },
           '-=0.25'
         )
+      })
     })
 
-    return () => ctx.revert()
+    return () => {
+      cancelled = true
+      ctx?.revert()
+    }
   }, [])
 
   return (
@@ -142,7 +148,7 @@ export default function Hero() {
             href="#contact"
             onClick={(e) => {
               e.preventDefault()
-              document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
+              scrollToId('contact')
             }}
             className="nb-btn px-5 py-2.5 bg-ink text-bg font-mono font-bold text-sm rounded"
           >
@@ -152,7 +158,7 @@ export default function Hero() {
             href="#projects"
             onClick={(e) => {
               e.preventDefault()
-              document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })
+              scrollToId('projects')
             }}
             className="nb-btn px-5 py-2.5 bg-surface text-ink font-mono font-bold text-sm rounded flex items-center gap-2"
           >

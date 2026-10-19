@@ -3,7 +3,7 @@ import { Menu, X, Download } from 'lucide-react'
 import { navItems } from '../data/content.js'
 import { useActiveSection } from '../hooks.js'
 import { gsap } from '../lib/gsap.js'
-import { getLenis } from '../lib/smoothScroll.js'
+import { scrollToId } from '../lib/smoothScroll.js'
 
 // Computed once at module scope so the reference stays stable across
 // re-renders (avoids re-running the ScrollTrigger effect on every scroll).
@@ -46,14 +46,21 @@ export default function Nav() {
 
   const handleClick = (id) => {
     setOpen(false)
-    const lenis = getLenis()
-    const target = document.getElementById(id)
-    if (lenis && target) {
-      lenis.scrollTo(target, { duration: 1.1 })
-    } else {
-      target?.scrollIntoView({ behavior: 'smooth' })
-    }
+    scrollToId(id)
   }
+
+  // Esc closes the mobile menu; crossing the md breakpoint resets it.
+  useEffect(() => {
+    const onKey = (e) => e.key === 'Escape' && setOpen(false)
+    const mq = window.matchMedia('(min-width: 768px)')
+    const onMq = () => mq.matches && setOpen(false)
+    window.addEventListener('keydown', onKey)
+    mq.addEventListener('change', onMq)
+    return () => {
+      window.removeEventListener('keydown', onKey)
+      mq.removeEventListener('change', onMq)
+    }
+  }, [])
 
   return (
     <header
@@ -113,8 +120,16 @@ export default function Nav() {
         </button>
       </div>
 
-      {open && (
-        <nav className="md:hidden bg-bg border-t-[3px] border-ink px-5 pb-6 pt-2 font-mono text-sm font-bold flex flex-col">
+      <div
+        className={`md:hidden grid transition-[grid-template-rows] duration-300 ease-out ${
+          open ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
+        }`}
+        ref={(el) => {
+          if (el) el.inert = !open
+        }}
+      >
+        <nav className="overflow-hidden min-h-0">
+        <div className="bg-bg border-t-[3px] border-ink px-5 pb-6 pt-2 font-mono text-sm font-bold flex flex-col">
           {navItems.map((item) => (
             <button
               key={item.id}
@@ -134,8 +149,9 @@ export default function Nav() {
             <Download size={14} strokeWidth={2.5} />
             Unduh CV
           </a>
+        </div>
         </nav>
-      )}
+      </div>
     </header>
   )
 }

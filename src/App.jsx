@@ -6,6 +6,7 @@ import Experience from './components/Experience.jsx'
 import Projects from './components/Projects.jsx'
 import Skills from './components/Skills.jsx'
 import Contact from './components/Contact.jsx'
+import Marquee from './components/Marquee.jsx'
 import { useScrollReveal } from './hooks.js'
 import { gsap, ScrollTrigger, prefersReducedMotion } from './lib/gsap.js'
 import { startSmoothScroll } from './lib/smoothScroll.js'
@@ -14,15 +15,15 @@ export default function App() {
   useScrollReveal()
   const progressRef = useRef(null)
 
-  // Smooth scroll (skipped under prefers-reduced-motion — see smoothScroll.js)
+  // Guliran halus/smooth scroll (dilewati jika opsi 'prefers-reduced-motion' aktif — lihat smoothScroll.js)
   useEffect(() => {
     const stop = startSmoothScroll()
     return () => stop?.()
   }, [])
 
-  // A thin read-progress bar under the nav — functional, not decorative:
-  // it mirrors how far down the page you are, in keeping with the
-  // "system status" framing rather than being a generic gradient flourish.
+  // Indikator kemajuan membaca (read-progress bar) tipis di bawah navigasi — bersifat fungsional, bukan dekoratif:
+  // elemen ini mencerminkan sejauh mana Anda telah menggulir halaman, sejalan dengan
+  // konsep "status sistem" ketimbang sekadar hiasan gradien biasa.
   useEffect(() => {
     if (prefersReducedMotion() || !progressRef.current) return
 
@@ -48,6 +49,7 @@ export default function App() {
       <Nav />
       <main>
         <Hero />
+        <Marquee />
         <About />
         <Experience />
         <Projects />
