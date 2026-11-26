@@ -24,7 +24,6 @@
   70%, 100% { box-shadow: 0 0 0 7px color-mix(in srgb, var(--color-accent) 0%, transparent); }
 }
 
-/* Token non-warna yang ikut berganti tema (default = dark). */
 :root {
   --grid-line: rgb(255 255 255 / 0.045);
   --shadow-card: rgb(0 0 0 / 0.8);
@@ -111,7 +110,6 @@ button:focus-visible {
 .shadow-card { box-shadow: 0 30px 80px -40px var(--shadow-card); }
 .shadow-phone { box-shadow: 0 40px 90px -40px var(--shadow-phone); }
 
-/* Transisi halus hanya saat tema diganti (kelas dipasang sementara oleh theme.js). */
 .theme-anim,
 .theme-anim *,
 .theme-anim *::before,

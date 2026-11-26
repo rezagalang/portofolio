@@ -21,9 +21,7 @@ export function setTheme(next) {
   root.dataset.theme = next
   try {
     localStorage.setItem(KEY, next)
-  } catch {
-    /* penyimpanan tidak tersedia: tema tetap berlaku untuk sesi ini */
-  }
+  } catch {}
 
   document.querySelector('meta[name="color-scheme"]')?.setAttribute('content', next)
   const bg = getComputedStyle(root).getPropertyValue('--color-bg').trim()
