@@ -23,7 +23,7 @@ const base =
 
 const variants = {
   primary: 'bg-ink text-bg hover:bg-accent',
-  ghost: 'border border-line-strong text-ink hover:border-ink/50 hover:bg-white/[0.04]',
+  ghost: 'border border-line-strong text-ink hover:border-ink/50 hover:bg-hover',
 }
 
 export function Button({ variant = 'primary', icon: Icon, arrow = false, className = '', children, ...props }) {

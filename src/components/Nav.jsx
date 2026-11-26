@@ -3,6 +3,7 @@ import { Menu, X, Download } from 'lucide-react'
 import { navItems, profile } from '../data/content.js'
 import { useActiveSection } from '../hooks.js'
 import { scrollToId } from '../lib/smoothScroll.js'
+import ThemeToggle from './ThemeToggle.jsx'
 
 const sectionIds = navItems.map((n) => n.id)
 
@@ -82,17 +83,21 @@ export default function Nav() {
             <Download size={14} strokeWidth={2} aria-hidden="true" className="transition-transform duration-300 group-hover:translate-y-0.5" />
             CV
           </a>
+          <ThemeToggle />
         </nav>
 
-        <button
-          className="grid h-10 w-10 place-items-center rounded-full border border-line-strong text-ink md:hidden"
-          onClick={() => setOpen((o) => !o)}
-          aria-label={open ? 'Tutup menu' : 'Buka menu'}
-          aria-expanded={open}
-          aria-controls="mobile-menu"
-        >
-          {open ? <X size={18} strokeWidth={2} /> : <Menu size={18} strokeWidth={2} />}
-        </button>
+        <div className="flex items-center gap-2 md:hidden">
+          <ThemeToggle />
+          <button
+            className="grid h-10 w-10 place-items-center rounded-full border border-line-strong text-ink"
+            onClick={() => setOpen((o) => !o)}
+            aria-label={open ? 'Tutup menu' : 'Buka menu'}
+            aria-expanded={open}
+            aria-controls="mobile-menu"
+          >
+            {open ? <X size={18} strokeWidth={2} /> : <Menu size={18} strokeWidth={2} />}
+          </button>
+        </div>
       </div>
 
       <div

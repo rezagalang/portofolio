@@ -14,7 +14,7 @@ function FlowPhone() {
   }
 
   return (
-    <div className="mx-auto w-[15.5rem] rounded-[2.4rem] border border-line-strong bg-bg p-2.5 shadow-[0_40px_90px_-40px_rgb(0_0_0/0.9)] sm:w-[16.5rem]">
+    <div className="mx-auto w-[15.5rem] rounded-[2.4rem] border border-line-strong bg-bg p-2.5 shadow-phone sm:w-[16.5rem]">
       <div className="rounded-[1.9rem] bg-surface px-5 pb-6 pt-7">
         {fp.screenshot ? (
           <img src={fp.screenshot} alt={`Tampilan aplikasi ${fp.name}`} className="rounded-2xl" loading="lazy" />
@@ -117,7 +117,7 @@ function HighlightCard({ project, index }) {
 
 function ProjectRow({ project, index }) {
   return (
-    <li className="group grid gap-3 border-t border-line px-1 py-7 transition-colors duration-300 hover:bg-white/[0.025] md:grid-cols-12 md:gap-8 md:px-4">
+    <li className="group grid gap-3 border-t border-line px-1 py-7 transition-colors duration-300 hover:bg-hover md:grid-cols-12 md:gap-8 md:px-4">
       <span className="font-mono text-xs text-subtle md:col-span-1 md:pt-2">{String(index).padStart(2, '0')}</span>
       <h3 className="font-serif text-2xl text-ink transition-transform duration-500 group-hover:translate-x-1 md:col-span-4">
         {project.name}

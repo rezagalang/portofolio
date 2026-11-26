@@ -29,7 +29,7 @@ function ProfilePanel() {
 
   return (
     <figure
-      className="hero-in overflow-hidden rounded-2xl border border-line bg-surface shadow-[0_30px_80px_-40px_rgb(0_0_0/0.8)]"
+      className="hero-in overflow-hidden rounded-2xl border border-line bg-surface shadow-card"
       aria-label="Ringkasan profil dalam format JSON"
     >
       <figcaption className="flex items-center justify-between border-b border-line px-5 py-3">

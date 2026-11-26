@@ -9,7 +9,7 @@ function ContactRow({ label, value, href, external }) {
     <a
       href={href}
       {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-      className="group flex items-center justify-between gap-4 border-t border-line py-5 transition-colors duration-300 hover:bg-white/[0.025] sm:px-2"
+      className="group flex items-center justify-between gap-4 border-t border-line py-5 transition-colors duration-300 hover:bg-hover sm:px-2"
     >
       <span>
         <span className="eyebrow block">{label}</span>
@@ -66,7 +66,7 @@ export default function Contact() {
             <div className="flex items-stretch border-t border-line">
               <a
                 href={`mailto:${profile.email}`}
-                className="group flex-1 py-5 transition-colors duration-300 hover:bg-white/[0.025] sm:px-2"
+                className="group flex-1 py-5 transition-colors duration-300 hover:bg-hover sm:px-2"
               >
                 <span className="eyebrow block">Email</span>
                 <span className="mt-2 block break-all text-base text-ink sm:text-lg">{profile.email}</span>

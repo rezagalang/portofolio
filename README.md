@@ -34,3 +34,11 @@ src/hooks.js                 scroll reveal, nav aktif
 Edit `src/data/content.js`. Untuk menampilkan tangkapan layar asli Detags di frame ponsel,
 taruh gambar di `public/` lalu isi `featuredProject.screenshot` (mis. `'/detags-home.png'`).
 Jika kosong, yang tampil adalah ilustrasi alur pesanan.
+
+## Mode dark & light
+
+- Default selalu **dark**; pilihan pengunjung disimpan di `localStorage` (kunci `theme`).
+- Tema dipasang lewat atribut `data-theme` pada `<html>` (skrip kecil di `index.html` mencegah kedipan).
+- Token dark ada di `@theme`, token light di blok `:root[data-theme="light"]` pada `src/index.css`.
+- Palet light varian ini: **Abu terang dingin**. Posisi toggle: **navbar (desktop + header mobile)**.
+- Logika: `src/theme.js`, tombol: `src/components/ThemeToggle.jsx`.

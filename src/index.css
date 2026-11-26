@@ -4,6 +4,7 @@
   --color-bg: #0d0e10;
   --color-surface: #141517;
   --color-raised: #1a1b1e;
+  --color-hover: rgb(255 255 255 / 0.03);
   --color-line: rgb(255 255 255 / 0.08);
   --color-line-strong: rgb(255 255 255 / 0.16);
   --color-ink: #ecebe7;
@@ -19,8 +20,36 @@
 }
 
 @keyframes pulseDot {
-  0% { box-shadow: 0 0 0 0 rgb(216 137 91 / 0.45); }
-  70%, 100% { box-shadow: 0 0 0 7px rgb(216 137 91 / 0); }
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-accent) 45%, transparent); }
+  70%, 100% { box-shadow: 0 0 0 7px color-mix(in srgb, var(--color-accent) 0%, transparent); }
+}
+
+/* Token non-warna yang ikut berganti tema (default = dark). */
+:root {
+  --grid-line: rgb(255 255 255 / 0.045);
+  --shadow-card: rgb(0 0 0 / 0.8);
+  --shadow-phone: rgb(0 0 0 / 0.9);
+  --scroll-thumb: #2b2c30;
+}
+
+/* Mode light */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --color-bg: #edf0f4;
+  --color-surface: #e4e8ee;
+  --color-raised: #dae0e8;
+  --color-hover: rgb(20 26 34 / 0.04);
+  --color-line: rgb(20 26 34 / 0.1);
+  --color-line-strong: rgb(20 26 34 / 0.19);
+  --color-ink: #141a22;
+  --color-muted: #4d5663;
+  --color-subtle: #5e6775;
+  --color-accent: #a24819;
+
+  --grid-line: rgb(20 26 34 / 0.055);
+  --shadow-card: rgb(20 20 30 / 0.22);
+  --shadow-phone: rgb(20 20 30 / 0.3);
+  --scroll-thumb: #c3cad5;
 }
 
 html {
@@ -43,7 +72,7 @@ body {
 
 ::selection {
   background: var(--color-accent);
-  color: #0d0e10;
+  color: var(--color-bg);
 }
 
 a:focus-visible,
@@ -73,10 +102,26 @@ button:focus-visible {
 
 .hero-grid {
   background-image:
-    linear-gradient(to right, rgb(255 255 255 / 0.045) 1px, transparent 1px);
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px);
   background-size: calc(100% / 12) 100%;
   -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 85%);
   mask-image: linear-gradient(to bottom, #000 0%, transparent 85%);
+}
+
+.shadow-card { box-shadow: 0 30px 80px -40px var(--shadow-card); }
+.shadow-phone { box-shadow: 0 40px 90px -40px var(--shadow-phone); }
+
+/* Transisi halus hanya saat tema diganti (kelas dipasang sementara oleh theme.js). */
+.theme-anim,
+.theme-anim *,
+.theme-anim *::before,
+.theme-anim *::after {
+  transition:
+    background-color 0.35s ease,
+    color 0.35s ease,
+    border-color 0.35s ease,
+    fill 0.35s ease,
+    stroke 0.35s ease !important;
 }
 
 .link-line {
@@ -89,10 +134,10 @@ button:focus-visible {
 .link-line:hover,
 .link-line:focus-visible { background-size: 100% 1px; }
 
-* { scrollbar-width: thin; scrollbar-color: #2b2c30 transparent; }
+* { scrollbar-width: thin; scrollbar-color: var(--scroll-thumb) transparent; }
 ::-webkit-scrollbar { width: 10px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #2b2c30; border-radius: 10px; border: 2px solid var(--color-bg); }
+::-webkit-scrollbar-thumb { background: var(--scroll-thumb); border-radius: 10px; border: 2px solid var(--color-bg); }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
