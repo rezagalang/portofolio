@@ -1,5 +1,6 @@
 import { skillGroups, softSkills } from '../data/content.js'
-import { SectionHeader } from './ui.jsx'
+import { useContent } from '../i18n.js'
+import { SectionHeader, RichTitle } from './ui.jsx'
 
 function SkillRow({ title, items }) {
   return (
@@ -22,11 +23,12 @@ function SkillRow({ title, items }) {
 }
 
 export default function Skills() {
+  const { skillsTitle } = useContent()
   return (
     <section id="skills" aria-labelledby="skills-title" className="py-24 sm:py-32">
       <div className="wrap">
         <SectionHeader index="04" label="Technical Skills" id="skills-title">
-          Stack dan <span className="italic text-ink/60">kemampuan</span> teknis
+          <RichTitle t={skillsTitle} />
         </SectionHeader>
 
         <dl className="mt-14 sm:mt-20" data-stagger>

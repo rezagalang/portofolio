@@ -1,11 +1,13 @@
 import { useLayoutEffect, useRef } from 'react'
 import { ArrowDown, Download, MapPin } from 'lucide-react'
-import { about, heroStack, profile } from '../data/content.js'
+import { heroStack } from '../data/content.js'
+import { useContent } from '../i18n.js'
 import { gsap, prefersReducedMotion } from '../lib/gsap.js'
 import { scrollToId } from '../lib/smoothScroll.js'
 import { Button } from './ui.jsx'
 
 function ProfilePanel() {
+  const { about, profile, ui } = useContent()
   const str = (s) => <span className="text-accent">&quot;{s}&quot;</span>
   const key = (k) => <span className="text-ink/70">&quot;{k}&quot;</span>
   const punct = (p) => <span className="text-subtle">{p}</span>
@@ -30,7 +32,7 @@ function ProfilePanel() {
   return (
     <figure
       className="hero-in overflow-hidden rounded-2xl border border-line bg-surface shadow-card"
-      aria-label="Ringkasan profil dalam format JSON"
+      aria-label={ui.profileAria}
     >
       <figcaption className="flex items-center justify-between border-b border-line px-5 py-3">
         <span className="font-mono text-xs text-muted">profile.json</span>
@@ -58,6 +60,7 @@ function ProfilePanel() {
 }
 
 export default function Hero() {
+  const { profile, ui } = useContent()
   const root = useRef(null)
 
   useLayoutEffect(() => {
@@ -115,10 +118,10 @@ export default function Hero() {
                 }}
                 icon={ArrowDown}
               >
-                View Projects
+                {ui.viewProjects}
               </Button>
               <Button variant="ghost" href={profile.cvUrl} download={profile.cvFileName} icon={Download}>
-                Download CV
+                {ui.downloadCv}
               </Button>
             </div>
           </div>
@@ -129,7 +132,7 @@ export default function Hero() {
         </div>
 
         <div className="hero-fade mt-20 flex flex-col gap-4 border-t border-line py-6 sm:mt-28 sm:flex-row sm:items-center sm:gap-10">
-          <span className="eyebrow shrink-0">Stack utama</span>
+          <span className="eyebrow shrink-0">{ui.mainStack}</span>
           <ul className="flex flex-wrap gap-x-6 gap-y-2 font-mono text-[13px] text-muted">
             {heroStack.map((item) => (
               <li key={item}>{item}</li>

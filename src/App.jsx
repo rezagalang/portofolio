@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { useContent, useLang } from './i18n.js'
 import Nav from './components/Nav.jsx'
 import Hero from './components/Hero.jsx'
 import About from './components/About.jsx'
@@ -13,6 +14,14 @@ import { startSmoothScroll } from './lib/smoothScroll.js'
 export default function App() {
   useScrollReveal()
   const progressRef = useRef(null)
+  const lang = useLang()
+  const { ui } = useContent()
+
+  useEffect(() => {
+    // teks berganti panjangnya, jadi hitung ulang posisi trigger scroll
+    const t = setTimeout(() => ScrollTrigger.refresh(), 100)
+    return () => clearTimeout(t)
+  }, [lang])
 
   useEffect(() => {
     const stop = startSmoothScroll()
@@ -42,7 +51,7 @@ export default function App() {
         href="#main"
         className="sr-only z-[70] rounded-full bg-ink px-4 py-2 text-sm text-bg focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
       >
-        Lewati ke konten
+        {ui.skipToContent}
       </a>
       <div
         ref={progressRef}

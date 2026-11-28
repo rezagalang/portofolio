@@ -1,5 +1,15 @@
 import { ArrowUpRight } from 'lucide-react'
 
+export function RichTitle({ t }) {
+  return (
+    <>
+      {t.pre}
+      <span className="italic text-ink/60">{t.em}</span>
+      {t.post}
+    </>
+  )
+}
+
 export function SectionHeader({ index, label, id, children }) {
   return (
     <div className="reveal">

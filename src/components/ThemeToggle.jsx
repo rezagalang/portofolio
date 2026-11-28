@@ -1,10 +1,12 @@
 import { Moon, Sun } from 'lucide-react'
 import { useTheme } from '../theme.js'
+import { useContent } from '../i18n.js'
 
 export default function ThemeToggle({ variant = 'nav' }) {
   const [theme, toggle] = useTheme()
+  const { ui } = useContent()
   const isDark = theme === 'dark'
-  const label = isDark ? 'Beralih ke mode terang' : 'Beralih ke mode gelap'
+  const label = isDark ? ui.themeToLight : ui.themeToDark
   const floating = variant === 'floating'
 
   const icon = 'absolute transition-all duration-500 ease-out'

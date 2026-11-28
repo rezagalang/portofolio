@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Check } from 'lucide-react'
-import { featuredProject as fp, projects } from '../data/content.js'
+import { useContent } from '../i18n.js'
 import { gsap, prefersReducedMotion } from '../lib/gsap.js'
-import { Button, SectionHeader, Tag } from './ui.jsx'
+import { Button, SectionHeader, Tag, RichTitle } from './ui.jsx'
 
-const ALL = 'Semua'
+const ALL = null // null = semua; bukan teks agar tidak terikat bahasa
 
 function FlowPhone() {
+  const { featuredProject: fp, ui } = useContent()
   const dot = {
     done: 'border-accent bg-accent text-bg',
     active: 'border-accent text-accent animate-pulse-dot',
@@ -17,11 +18,11 @@ function FlowPhone() {
     <div className="mx-auto w-[15.5rem] rounded-[2.4rem] border border-line-strong bg-bg p-2.5 shadow-phone sm:w-[16.5rem]">
       <div className="rounded-[1.9rem] bg-surface px-5 pb-6 pt-7">
         {fp.screenshot ? (
-          <img src={fp.screenshot} alt={`Tampilan aplikasi ${fp.name}`} className="rounded-2xl" loading="lazy" />
+          <img src={fp.screenshot} alt={ui.screenshotAlt(fp.name)} className="rounded-2xl" loading="lazy" />
         ) : (
           <>
             <div className="mx-auto mb-6 h-1 w-14 rounded-full bg-line-strong" aria-hidden="true" />
-            <p className="eyebrow">Alur pesanan</p>
+            <p className="eyebrow">{ui.flowTitle}</p>
             <ol className="mt-5 space-y-5">
               {fp.flow.map((step, i) => (
                 <li key={step.title} className="flex items-start gap-3">
@@ -40,7 +41,7 @@ function FlowPhone() {
               ))}
             </ol>
             <p className="mt-7 border-t border-line pt-4 font-mono text-[10px] uppercase tracking-wider text-subtle">
-              + Program poin
+              {ui.pointsProgram}
             </p>
           </>
         )}
@@ -50,6 +51,7 @@ function FlowPhone() {
 }
 
 function Featured() {
+  const { featuredProject: fp, ui } = useContent()
   return (
     <article className="reveal overflow-hidden rounded-3xl border border-line bg-surface">
       <div className="grid lg:grid-cols-12">
@@ -66,7 +68,7 @@ function Featured() {
           <p className="mt-4 text-lg text-ink/85">{fp.headline}</p>
           <p className="mt-5 max-w-lg text-[15px] leading-relaxed text-muted">{fp.description}</p>
 
-          <ul className="mt-8 flex flex-wrap gap-2" aria-label="Teknologi">
+          <ul className="mt-8 flex flex-wrap gap-2" aria-label={ui.techAria}>
             {fp.tags.map((t) => (
               <li key={t}>
                 <Tag>{t}</Tag>
@@ -87,7 +89,7 @@ function Featured() {
           <FlowPhone />
           {!fp.screenshot && (
             <p className="mt-8 text-center font-mono text-[10px] uppercase tracking-wider text-subtle">
-              Ilustrasi alur — bukan tangkapan layar
+              {ui.flowDisclaimer}
             </p>
           )}
         </div>
@@ -97,6 +99,7 @@ function Featured() {
 }
 
 function HighlightCard({ project, index }) {
+  const { ui } = useContent()
   return (
     <article className="group rounded-2xl border border-line bg-surface p-7 transition-colors duration-500 hover:border-line-strong hover:bg-raised sm:p-9">
       <p className="font-mono text-xs text-subtle">{String(index).padStart(2, '0')}</p>
@@ -104,7 +107,7 @@ function HighlightCard({ project, index }) {
         {project.name}
       </h3>
       <p className="mt-4 text-[15px] leading-relaxed text-muted">{project.description}</p>
-      <ul className="mt-7 flex flex-wrap gap-2" aria-label="Teknologi">
+      <ul className="mt-7 flex flex-wrap gap-2" aria-label={ui.techAria}>
         {project.tags.map((t) => (
           <li key={t}>
             <Tag>{t}</Tag>
@@ -116,6 +119,7 @@ function HighlightCard({ project, index }) {
 }
 
 function ProjectRow({ project, index }) {
+  const { ui } = useContent()
   return (
     <li className="group grid gap-3 border-t border-line px-1 py-7 transition-colors duration-300 hover:bg-hover md:grid-cols-12 md:gap-8 md:px-4">
       <span className="font-mono text-xs text-subtle md:col-span-1 md:pt-2">{String(index).padStart(2, '0')}</span>
@@ -123,7 +127,7 @@ function ProjectRow({ project, index }) {
         {project.name}
       </h3>
       <p className="text-[15px] leading-relaxed text-muted md:col-span-4">{project.description}</p>
-      <ul className="flex flex-wrap content-start gap-2 md:col-span-3 md:justify-end" aria-label="Teknologi">
+      <ul className="flex flex-wrap content-start gap-2 md:col-span-3 md:justify-end" aria-label={ui.techAria}>
         {project.tags.map((t) => (
           <li key={t}>
             <Tag>{t}</Tag>
@@ -135,12 +139,12 @@ function ProjectRow({ project, index }) {
 }
 
 export default function Projects() {
-
+  const { featuredProject: fp, projects, projectsTitle, ui } = useContent()
   const filters = useMemo(() => {
     const count = {}
     ;[{ tags: fp.tags }, ...projects].forEach((p) => p.tags.forEach((t) => (count[t] = (count[t] || 0) + 1)))
     return [ALL, ...Object.keys(count).filter((t) => count[t] >= 2)]
-  }, [])
+  }, [fp.tags, projects])
 
   const [filter, setFilter] = useState(ALL)
   const listRef = useRef(null)
@@ -168,7 +172,7 @@ export default function Projects() {
     <section id="projects" aria-labelledby="projects-title" className="py-24 sm:py-32">
       <div className="wrap">
         <SectionHeader index="03" label="Featured Projects" id="projects-title">
-          Proyek <span className="italic text-ink/60">nyata</span>, dari ide sampai rilis.
+          <RichTitle t={projectsTitle} />
         </SectionHeader>
 
         <div className="mt-14 sm:mt-20">
@@ -176,11 +180,11 @@ export default function Projects() {
         </div>
 
         <div className="reveal mt-20 flex flex-wrap items-end justify-between gap-6">
-          <h3 className="font-serif text-3xl text-ink sm:text-4xl">Proyek lainnya</h3>
-          <div role="group" aria-label="Filter teknologi" className="flex flex-wrap gap-2">
+          <h3 className="font-serif text-3xl text-ink sm:text-4xl">{ui.otherProjects}</h3>
+          <div role="group" aria-label={ui.filterAria} className="flex flex-wrap gap-2">
             {filters.map((f) => (
               <button
-                key={f}
+                key={f ?? 'all'}
                 onClick={() => setFilter(f)}
                 aria-pressed={filter === f}
                 className={`h-9 rounded-full border px-4 text-sm transition-colors duration-300 ${
@@ -189,7 +193,7 @@ export default function Projects() {
                     : 'border-line-strong text-muted hover:border-ink/50 hover:text-ink'
                 }`}
               >
-                {f}
+                {f === ALL ? ui.all : f}
               </button>
             ))}
           </div>

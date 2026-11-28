@@ -1,12 +1,13 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import { ChevronDown } from 'lucide-react'
-import { experiences } from '../data/content.js'
+import { useContent } from '../i18n.js'
 import { ScrollTrigger } from '../lib/gsap.js'
-import { SectionHeader } from './ui.jsx'
+import { SectionHeader, RichTitle } from './ui.jsx'
 
 const VISIBLE = 4
 
 function ExperienceItem({ exp }) {
+  const { ui } = useContent()
   const [open, setOpen] = useState(false)
   const panelId = useId()
   const mounted = useRef(false)
@@ -65,7 +66,7 @@ function ExperienceItem({ exp }) {
               aria-controls={panelId}
               className="group mt-6 inline-flex items-center gap-2 text-sm text-ink transition-colors hover:text-accent"
             >
-              {open ? 'Ringkas' : `Lihat ${rest.length} tanggung jawab lainnya`}
+              {open ? ui.collapse : ui.seeMore(rest.length)}
               <ChevronDown
                 size={16}
                 strokeWidth={2}
@@ -81,11 +82,12 @@ function ExperienceItem({ exp }) {
 }
 
 export default function Experience() {
+  const { experiences, experienceTitle } = useContent()
   return (
     <section id="experience" aria-labelledby="experience-title" className="py-24 sm:py-32">
       <div className="wrap">
         <SectionHeader index="02" label="Work Experience" id="experience-title">
-          Pengalaman <span className="italic text-ink/60">kerja</span>
+          <RichTitle t={experienceTitle} />
         </SectionHeader>
 
         <div className="mt-14 sm:mt-20" data-stagger>

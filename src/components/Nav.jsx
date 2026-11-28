@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react'
 import { Menu, X, Download } from 'lucide-react'
-import { navItems, profile } from '../data/content.js'
+import { content } from '../data/content.js'
+import { useContent } from '../i18n.js'
 import { useActiveSection } from '../hooks.js'
 import { scrollToId } from '../lib/smoothScroll.js'
 import ThemeToggle from './ThemeToggle.jsx'
+import LangToggle from './LangToggle.jsx'
 
-const sectionIds = navItems.map((n) => n.id)
+const sectionIds = content.id.navItems.map((n) => n.id)
 
 export default function Nav() {
+  const { navItems, profile, ui } = useContent()
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const active = useActiveSection(sectionIds)
@@ -48,15 +51,24 @@ export default function Nav() {
           href="#top"
           onClick={(e) => go(e, 'top')}
           className="flex items-center gap-3 text-sm font-medium text-ink"
-          aria-label={`${profile.name} — kembali ke atas`}
+          aria-label={ui.backToTopAria(profile.name)}
         >
-          <span className="grid h-8 w-8 place-items-center rounded-lg border border-line-strong bg-surface font-mono text-[11px] tracking-tight">
-            RG
+          <span className="grid h-8 w-8 place-items-center rounded-lg border border-line-strong bg-surface text-ink">
+            <svg viewBox="0 0 32 32" className="h-full w-full" fill="none" aria-hidden="true" focusable="false">
+              <path
+                d="M10 22V10h6.2a3.6 3.6 0 0 1 0 7.2H10m6 0 4.2 4.8"
+                stroke="currentColor"
+                strokeWidth="2.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <circle cx="23.5" cy="10.5" r="2" fill="var(--color-accent)" />
+            </svg>
           </span>
           <span className="hidden sm:inline">{profile.name}</span>
         </a>
 
-        <nav aria-label="Navigasi utama" className="hidden items-center gap-8 md:flex">
+        <nav aria-label={ui.mainNav} className="hidden items-center gap-8 md:flex">
           {navItems.map((item) => {
             const isActive = active === item.id
             return (
@@ -81,17 +93,19 @@ export default function Nav() {
             className="group inline-flex h-9 items-center gap-2 rounded-full border border-line-strong px-4 text-sm text-ink transition-colors duration-300 hover:border-accent hover:text-accent"
           >
             <Download size={14} strokeWidth={2} aria-hidden="true" className="transition-transform duration-300 group-hover:translate-y-0.5" />
-            CV
+            {ui.cvShort}
           </a>
+          <LangToggle />
           <ThemeToggle />
         </nav>
 
         <div className="flex items-center gap-2 md:hidden">
+          <LangToggle />
           <ThemeToggle />
           <button
             className="grid h-10 w-10 place-items-center rounded-full border border-line-strong text-ink"
             onClick={() => setOpen((o) => !o)}
-            aria-label={open ? 'Tutup menu' : 'Buka menu'}
+            aria-label={open ? ui.closeMenu : ui.openMenu}
             aria-expanded={open}
             aria-controls="mobile-menu"
           >
@@ -109,7 +123,7 @@ export default function Nav() {
           if (el) el.inert = !open
         }}
       >
-        <nav aria-label="Navigasi seluler" className="min-h-0 overflow-hidden">
+        <nav aria-label={ui.mobileNav} className="min-h-0 overflow-hidden">
           <div className="wrap flex flex-col pb-8 pt-2">
             {navItems.map((item, i) => (
               <a
@@ -128,7 +142,7 @@ export default function Nav() {
               className="mt-4 inline-flex h-12 items-center justify-center gap-2 rounded-full bg-ink text-sm font-medium text-bg"
             >
               <Download size={16} strokeWidth={2} aria-hidden="true" />
-              Download CV
+              {ui.downloadCv}
             </a>
           </div>
         </nav>

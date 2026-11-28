@@ -1,8 +1,8 @@
 import { useRef, useState } from 'react'
 import { ArrowUpRight, Check, Copy, Download, Mail } from 'lucide-react'
-import { profile } from '../data/content.js'
+import { useContent } from '../i18n.js'
 import { scrollToId } from '../lib/smoothScroll.js'
-import { Button, SectionHeader } from './ui.jsx'
+import { Button, SectionHeader, RichTitle } from './ui.jsx'
 
 function ContactRow({ label, value, href, external }) {
   return (
@@ -26,6 +26,7 @@ function ContactRow({ label, value, href, external }) {
 }
 
 export default function Contact() {
+  const { profile, ui, contactTitle } = useContent()
   const [copied, setCopied] = useState(false)
   const timer = useRef(null)
 
@@ -46,18 +47,17 @@ export default function Contact() {
         <div className="grid gap-14 lg:grid-cols-12 lg:gap-10">
           <div className="lg:col-span-7">
             <SectionHeader index="05" label="Contact" id="contact-title">
-              Mari berdiskusi tentang <span className="italic text-ink/60">peran</span> atau proyek berikutnya.
+              <RichTitle t={contactTitle} />
             </SectionHeader>
             <p className="reveal mt-8 max-w-lg text-base leading-relaxed text-muted sm:text-lg">
-              Saya terbuka untuk posisi Software Engineer, Backend, Web, Flutter, maupun IT Support. Kirim email atau
-              hubungi lewat LinkedIn, saya akan membalas secepatnya.
+              {ui.contactIntro}
             </p>
             <div className="reveal mt-10 flex flex-wrap gap-3">
               <Button href={`mailto:${profile.email}`} icon={Mail}>
-                Kirim email
+                {ui.sendEmail}
               </Button>
               <Button variant="ghost" href={profile.cvUrl} download={profile.cvFileName} icon={Download}>
-                Download CV
+                {ui.downloadCv}
               </Button>
             </div>
           </div>
@@ -73,16 +73,16 @@ export default function Contact() {
               </a>
               <button
                 onClick={copyEmail}
-                aria-label="Salin alamat email"
+                aria-label={ui.copyEmail}
                 className="grid w-12 place-items-center self-center text-subtle transition-colors hover:text-accent"
               >
                 {copied ? <Check size={18} strokeWidth={2} /> : <Copy size={18} strokeWidth={2} />}
               </button>
               <span className="sr-only" role="status">
-                {copied ? 'Email disalin' : ''}
+                {copied ? ui.emailCopied : ''}
               </span>
             </div>
-            <ContactRow label="Telepon" value={profile.phone} href={`tel:${profile.phone.replace(/\s/g, '')}`} />
+            <ContactRow label={ui.phone} value={profile.phone} href={`tel:${profile.phone.replace(/\s/g, '')}`} />
             <ContactRow label="LinkedIn" value={profile.linkedin} href={profile.linkedinUrl} external />
             <div className="border-t border-line" />
           </div>
@@ -100,7 +100,7 @@ export default function Contact() {
             }}
             className="link-line text-muted hover:text-ink"
           >
-            Kembali ke atas ↑
+            {ui.backToTop}
           </a>
         </footer>
       </div>

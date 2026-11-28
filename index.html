@@ -8,9 +8,12 @@
     <script>
       (function () {
         var t = 'dark'
+        var l = 'id'
         try {
           if (localStorage.getItem('theme') === 'light') t = 'light'
+          if (localStorage.getItem('lang') === 'en') l = 'en'
         } catch (e) {}
+        document.documentElement.setAttribute('lang', l)
         document.documentElement.setAttribute('data-theme', t)
         document.querySelector('meta[name="color-scheme"]').setAttribute('content', t)
         document

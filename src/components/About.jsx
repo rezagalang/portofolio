@@ -1,5 +1,5 @@
-import { about } from '../data/content.js'
-import { SectionHeader } from './ui.jsx'
+import { useContent } from '../i18n.js'
+import { SectionHeader, RichTitle } from './ui.jsx'
 
 function Row({ label, children }) {
   return (
@@ -11,7 +11,8 @@ function Row({ label, children }) {
 }
 
 export default function About() {
-  const { summary, focus, education, openTo } = about
+  const { about, ui } = useContent()
+  const { summary, focus, education, openTo, title } = about
 
   return (
     <section id="about" aria-labelledby="about-title" className="py-24 sm:py-32">
@@ -19,7 +20,7 @@ export default function About() {
         <div className="lg:col-span-4">
           <div className="lg:sticky lg:top-28">
             <SectionHeader index="01" label="About" id="about-title">
-              Membangun sistem yang <span className="italic text-ink/60">dipakai</span> orang sungguhan.
+              <RichTitle t={title} />
             </SectionHeader>
           </div>
         </div>
@@ -33,7 +34,7 @@ export default function About() {
 
           <dl className="mt-14" data-stagger>
             <div className="reveal">
-              <Row label="Fokus">
+              <Row label={ui.aboutFocus}>
                 <ul className="grid gap-x-8 gap-y-4 sm:grid-cols-2">
                   {focus.map((f) => (
                     <li key={f.title}>
@@ -45,7 +46,7 @@ export default function About() {
               </Row>
             </div>
             <div className="reveal">
-              <Row label="Pendidikan">
+              <Row label={ui.aboutEducation}>
                 <p className="text-ink">{education.school}</p>
                 <p className="mt-0.5 text-sm text-muted">
                   {education.degree} · {education.gpa}
@@ -54,7 +55,7 @@ export default function About() {
               </Row>
             </div>
             <div className="reveal">
-              <Row label="Terbuka untuk">
+              <Row label={ui.aboutOpenTo}>
                 <ul className="flex flex-wrap gap-2">
                   {openTo.map((r) => (
                     <li key={r} className="rounded-full border border-line px-3 py-1.5 text-sm text-ink/85">
